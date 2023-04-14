@@ -1,3 +1,4 @@
+from os import system
 class Checkers:
     def __init__(self):
         self.board = [[' * ', 'w09', ' * ', 'w10', ' * ', 'w11', ' * ', 'w12'],
@@ -119,6 +120,7 @@ while True:
         if k.sorter(name, to):
             res = k.game_over(name[0])
             k.mov += 1
+            system('cls')
             if res:
                 print(res)
                 break
