@@ -59,12 +59,8 @@ class Checkers:
                 if to not in (tuple(opp_pos.values()) + tuple(pos.values())):
                     return self.mover(name, to)
             elif tx == fx + 2 * sign and (ty == fy - 2 or ty == fy + 2):
-                if [fx + sign, fy - 1] in opp_pos.values():
-                    if self.remover(color, [fx + sign, fy - 1]) and self.mover(name, to):
-                        return self.surround_checker(name)
-                elif [fx + sign, fy + 1] in opp_pos.values():
-                    if self.remover(color, [fx + sign, fy + 1]) and self.mover(name,to):
-                        return self.surround_checker(name)
+                if [(tx+fx)//2,(ty+fy)//2 ] in opp_pos.values() and self.remover(color,[(tx+fx)//2,(ty+fy)//2]) and self.mover(name,to):
+                    return self.surround_checker(name)
         return False
 
     def sorter(self, name, to):
@@ -107,24 +103,35 @@ class Checkers:
         pos = self.wpos if color in ('b','B') else self.bpos
         return f'{color} wins' if len(pos) == 0 else False
 
-
-k = Checkers()
-chance = ['b','w']
-while True:
-    k.print_board()
-    if len(name:=input('name: ')) == 3 and name[0].lower() == chance[k.mov%2]:
-        to = input('pos: ').split()
-        if len(to) != 2 or len(to[0]) != len(to[1]) != 1 or (to[0] and to[1]) not in map(str, range(8)):
-            continue
-        to = list(map(int, to))
-        if k.sorter(name, to):
-            res = k.game_over(name[0])
-            k.mov += 1
-            system('cls')
-            if res:
-                print(res)
-                break
+if __name__ == '__main__':
+    game = Checkers()
+    chance = ['b','w']
+    while True:
+        game.print_board()
+        if len(name:=input('name: ')) == 3 and name[0].lower() == chance[game.mov%2]:
+            to = input('pos: ').split()
+            if len(to) != 2 or len(to[0]) != len(to[1]) != 1 or (to[0] and to[1]) not in map(str, range(8)):
+                continue
+            to = list(map(int, to))
+            if k.sorter(name, to):
+                res = game.game_over(name[0])
+                game.mov += 1
+                system('cls')
+                if res:
+                    game.print_board()
+                    print(res)
+                    break
+            else:
+                print('illegal move brotohoror')
         else:
-            print('illegal move brotohoror')
-    else:
-        print(f'give a valid name boother\n its {chance[k.mov%2]} chance')
+            print(f'give a valid name boother\n its {chance[game.mov%2]} chance')
+
+def spare_comments():pass
+'''
+#                 if [fx + sign, fy - 1] in opp_pos.values():
+#                     if self.remover(color, [fx + sign, fy - 1]) and self.mover(name, to):
+#                         return self.surround_checker(name)
+#                 elif [fx + sign, fy + 1] in opp_pos.values():
+#                     if self.remover(color, [fx + sign, fy + 1]) and self.mover(name,to):
+#                         return self.surround_checker(name)
+'''
