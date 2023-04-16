@@ -39,8 +39,8 @@ class Checkers:
         fx, fy = pos[name]
         tx, ty = to
         if (tx == 7 and name[0] == 'w') or (tx == 0 and name[0] == 'b'):
-            pos[(name := name[0].upper() + name[1:])] = pos.pop(name)
-            k.mov -= 1
+            pos[(name := name.capitalize())] = pos.pop(name)
+            self.mov -= 1
         pos[name] = to
         self.board[fx][fy] = ' * '
         self.board[tx][ty] = name
@@ -76,7 +76,7 @@ class Checkers:
         color = pawn[0]
         sign, opp_pos, pos = (-1, self.wpos, self.bpos) if color in ('b', 'B') else (1, self.bpos, self.wpos)
         fx, fy = pos.get(pawn, [-1, -1])
-        to = -1
+        to = []
         # if king is there
         if fx == fy == -1:
             fx, fy = pos[(pawn := pawn[0].upper() + pawn[1:])]
@@ -88,16 +88,21 @@ class Checkers:
                 tx, ty = [fx + 2 * (x - fx), fy + 2 * (y - fy)]
                 if 0 <= tx <= 7 and 0 <= ty <= 7 and self.board[tx][ty] == ' * ':
                     mul += 1
-                    to = [tx, ty]
+                    to += [tx, ty]
         if mul == 0:
             return True
         elif mul != 1:
             to = input(f'there are {mul} ways give the pos: ').split()
-            while len(to) != 2 or len(to[0]) != len(to[1]) != 1 or (to[0] and to[1]) not in map(str, range(
-                    8)):
-                to = input(f'there are {mul} ways give the pos: ').split()
-            to = list(map(int, to))
-        return self.pawn(pawn,to)
+            while True:#len(to) != 2 or len(to[0]) != len(to[1]) != 1 or (to[0] and to[1]) not in map(str, range(8)):
+                try:
+                    tx,ty = map(int,input(f'there are {mul} ways give the pos: ').split())
+                    if 0<=tx<=7 and 0<=ty<=7:
+                        to = [[tx,ty]]
+                        break
+                 except KeyboardInterrupt:
+                    raise KeyboardInterrupt("you ended it by yourself")
+                 except:pass
+        return self.pawn(pawn,to[0])
 
     def game_over(self,color):
         pos = self.wpos if color in ('b','B') else self.bpos
@@ -111,9 +116,11 @@ if __name__ == '__main__':
         if len(name:=input('name: ')) == 3 and name[0].lower() == chance[game.mov%2]:
             to = input('pos: ').split()
             if len(to) != 2 or len(to[0]) != len(to[1]) != 1 or (to[0] and to[1]) not in map(str, range(8)):
+                system('cls')
+                print("give the right position ")
                 continue
             to = list(map(int, to))
-            if k.sorter(name, to):
+            if game.sorter(name, to):
                 res = game.game_over(name[0])
                 game.mov += 1
                 system('cls')
